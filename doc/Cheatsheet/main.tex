@@ -1,0 +1,215 @@
+%% Time-stamp: <2011-06-21 14:12:44 vk>
+\documentclass[a4paper]{scrartcl}
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\renewcommand*\familydefault{\sfdefault} %% whole document in sans serif
+\usepackage{savetrees} %% maximize space, ignore beautiful page area definitions
+\usepackage{ifthen}  %% conditional expressions
+\usepackage{tipa} %% for \textpipe
+\usepackage{colortbl} %% for colorful tables
+\usepackage[table]{xcolor}  %% for being able to define table background colors
+\rowcolors[]{1}{blue!8}{blue!0} %% define alternating row colors
+
+\begin{document}
+
+
+
+%% internal command for \vkshortcut and \vkishortcut:
+\newcommand{\vkcmd}[1]{\texttt{#1}}
+
+\newcommand{\vktableheading}{%%
+\rowcolor{black}\color{white}
+\footnotesize{\sc What} & \color{white}\footnotesize{\sc How} & \color{white}\footnotesize{\sc Function} \\%%
+}
+
+%% Cheatcode:
+%% #1 ... short description
+%% #2 ... empty OR where is the cursor
+%% #3 ... keyboard shortcut OR empty
+%% #4 ... empty OR emacs command
+\newcommand{\vkshortcut}[4]{%%
+#1 \ifthenelse{\equal{#2}{}}{}{\small{(#2)}} & \vkcmd{#3} & \texttt{\small{#4}} \\
+}
+
+%% like \vkshortcut but only highlighted (important)
+\newcommand{\vkishortcut}[4]{%%
+\vkshortcut{\hspace*{-.4em}\textbf{#1}}{#2}{\textbf{#3}}{#4}%%
+}
+
+\newcommand{\vkusage}[3]{%%
+#1 \ifthenelse{\equal{#2}{}}{}{\small{(#2)}} & \multicolumn{2}{l}{\quad\texttt{\small{#3}}} \\
+}
+
+\begin{table}[ht]
+  \centering
+  \caption{Document Structure}
+  \label{tab:doc-struct2}
+\begin{tabular}{lll}
+\vktableheading
+\vkishortcut{Cycle (expand/hide) tree}{headlines}{TAB}{org-cycle}
+\vkshortcut{Global cycling}{}{S-TAB}{org-global-cycle}
+\vkishortcut{Next heading}{}{C-c C-n}{outline-next-visibility-heading}
+\vkishortcut{Previous heading}{}{C-c C-p}{outline-previous-visibility-heading}
+\vkshortcut{Up to higher level}{}{C-c C-u}{outline-up-heading}
+\vkshortcut{Jump to other place}{}{C-c C-j}{org-goto}
+\vkshortcut{Insert new heading on same level}{}{C-RET}{org-insert-heading-respect-content}
+\vkishortcut{Insert new TODO heading on same level}{}{S-C-RET}{org-insert-todo-heading-respect-content}
+\vkshortcut{Insert new checkbox}{}{M-S-RET}{}
+\vkishortcut{Move item}{}{M-[$\leftarrow\uparrow\downarrow\rightarrow$]}{}
+\vkshortcut{Move item with subitems}{}{M-S-[$\leftarrow\uparrow\downarrow\rightarrow$]}{}
+\vkshortcut{Toggle state or checkbox}{}{C-c C-c}{}
+\vkshortcut{Add time-stamped note}{}{C-c C-z}{}
+\vkishortcut{Filter in sparse tree}{}{C-c /}{org-sparse-tree}
+\vkshortcut{Filter with RegEx}{}{C-c / r}{org-occur}
+\vkshortcut{goto next match}{sparse tree}{M-g n}{next-error}
+\vkshortcut{goto previous match}{sparse tree}{M-g o}{previous-error}
+\vkusage{Footnote}{}{[fn:: \emph{a good caption}]}
+\vkusage{Footnote with label}{}{[fn:\emph{label}: \emph{a good caption}]}
+\vkusage{Footnote Reference}{}{[fn:\emph{label}]}
+\vkshortcut{Jump between footnote and reference}{footnote}{C-c C-c}{}
+\vkusage{Shortcuts for entering example}{}{$<$e TAB}
+\vkusage{Available shortcuts for completion}{}{M-x describe-variable RET org-structure-template-alist}
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \caption{Tables}
+  \label{tab:doc-tables}
+\begin{tabular}{lll}
+\vktableheading
+\vkishortcut{Re-align table}{}{C-c C-c}{org-table-align}
+\vkishortcut{Move to next field and re-align}{}{TAB}{org-table-next-field}
+\vkshortcut{Move to next row and re-align}{}{RET}{org-table-next-row}
+\vkishortcut{Move column left/right}{}{M-[$\leftarrow\rightarrow$]}{org-table-move-column-(left\textpipe{}right)}
+\vkishortcut{Move column up/down}{}{M-[$\uparrow\downarrow$]}{org-table-move-row-(up\textpipe{}down)}
+\vkshortcut{Insert vertical bar below row}{}{C-c -}{org-table-insert-hline}
+\vkshortcut{Sum numbers of current column}{}{C-c +}{org-table-sum}
+\vkshortcut{Export table}{}{}{org-table-export}
+\vkusage{Table formular}{below table}{\#+TBLFM: \$3 = \$1 + \$2}
+\vkusage{Incremetal numbers}{TBLFM}{\#+TBLFM: \$1=\@-1 + 1::@2\$1=1}  %% http://orgmode.org/worg/org-faq.html
+\end{tabular}
+\end{table}
+
+
+\begin{table}[ht]
+  \centering
+  \caption{TODO items}
+  \label{tab:doc-todo}
+\begin{tabular}{lll}
+\vktableheading
+\vkishortcut{Rotate TODO state}{}{C-c C-t}{org-todo}
+\vkshortcut{Show TODO items in sparse tree}{}{C-c / t}{org-show-todo-key}
+\vkishortcut{Show global TODO list in agenda}{}{C-c a t}{org-todo-list}
+\vkishortcut{Insert new TODO below}{}{M-S-RET}{org-insert-todo-heading}
+\vkishortcut{Toggle ORDERED flag for father-heading}{}{C-c C-x o}{org-toggle-ordered-property}
+\vkshortcut{Set priority}{}{C-c ,}{org-priority}
+\vkshortcut{Priority up/down}{}{S-[$\uparrow\downarrow$]}{org-priority-(up|down)}
+\vkusage{Per-file keywords}{!\ldots{}timestamp; @\ldots{}note}{\#+TODO: TODO(t) FEEDBACK(f) \textpipe DONE(d!) CANCELED(c!@)}
+\vkusage{Define task ID}{properties}{:ID: \emph{my-id}}
+\vkusage{Define blocking task}{properties}{:BLOCKER: \emph{other-id}}
+\vkusage{Define trigger for setting NEXT}{properties}{:TRIGGER: chain-siblings(NEXT)}
+\vkusage{Adding statistics cookies to TODO}{headings}{[/] \emph{or} [\%] $\rightarrow$ [\emph{2}/\emph{5}] \emph{or} [\emph{42}\%]}
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \caption{Tags}
+  \label{tab:doc-tags}
+\begin{tabular}{lll}
+\vktableheading
+\vkshortcut{Tag current headline}{}{C-c C-q}{org-set-tags-command}
+\vkishortcut{Tag current headline}{headline}{C-c C-c}{org-set-tags-command}
+\vkshortcut{Create sparse tree with matching tags}{}{C-c \textbackslash}{org-match-sparse-tree}
+\vkishortcut{Create global agenda list of matching tags}{}{C-c a m}{org-tags-view}
+\vkshortcut{Create global agenda list of matching TODO items with tags}{}{C-c a M}{org-tags-view}
+\vkusage{Adding tags manually}{end of headline}{:\emph{TAGNAME1}:\emph{TAGNAME2}:}
+\vkusage{Setting default tags per file}{}{\#+TAGS: \{ \emph{@work @home} \} \emph{projectxy}}
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \caption{Dates and Times}
+  \label{tab:doc-datetime}
+\begin{tabular}{lll}
+\vktableheading
+\vkishortcut{Insert timestamp}{}{C-c .}{org-time-stamp}
+\vkshortcut{Change current date by one day}{timestamp}{S-[$\leftarrow\rightarrow$]}{org-timestamp-(down|up)-day}
+\vkshortcut{Change current dateelement by one}{timestamp}{S-[$\uparrow\downarrow$]}{org-timestamp-(up|down)}
+\vkishortcut{Add deadline         }{}{C-c C-d}{org-deadline}
+\vkishortcut{Add scheduled date   }{}{C-c C-s}{org-schedule}
+\vkusage{Removing deadline/scheduled datestamp}{}{C-u C-c C-d OR C-u C-c C-s}
+\vkshortcut{Sparse tree with deadlines (already due or close)}{}{C-c / d}{org-check-deadlines}
+\vkusage{Defining repeated tasks}{timestamp}{DEADLINE: <YYYY-MM-DD DoW \emph{+2d}>}
+\vkusage{Repetition interval starting with last DONE date}{timestamp}{DEADLINE: <YYYY-MM-DD DoW \emph{.+2d}>}
+\vkusage{Never show multiple tasks even if unsolved}{timestamp}{DEADLINE: <YYYY-MM-DD DoW \emph{++2d}>}
+\vkishortcut{Clone (recurring) event with timeshift}{}{C-c C-x c}{org-clone-subtree-with-time-shift}
+\vkusage{Defining durations}{timestamp}{\emph{13:00+2:15 or 13:00-15:15}}
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \caption{Capture --- Refile --- Archive}
+  \label{tab:doc-capturerefilearchive}
+\begin{tabular}{lll}
+\vktableheading
+\vkishortcut{Capture}{}{C-c c}{org-capture}
+\vkishortcut{Close capture}{}{C-c C-c}{org-capture-finalize}
+\vkishortcut{Refile (and close capture)}{}{C-c C-w}{org-capture-refile}
+\vkshortcut{Kill capture (abort)}{}{C-c C-k}{org-capture-kill}
+\vkshortcut{Visit capture template}{}{C-u C-c c}{}
+\vkshortcut{Visit last stored capture}{}{C-u C-u C-c c}{}
+\vkishortcut{Archive current entry}{}{C-c C-x C-a}{org-archive-subtree-default}
+\vkusage{Set per-file archive}{}{\#+ARCHIVE: \emph{\%s\_done}::}
+\vkishortcut{Toggle ARCHIVE tag}{}{C-c C-x a}{org-toggle-archive-tag}
+\vkshortcut{Check direct children for archiving}{}{C-u C-c C-x a}{}
+\end{tabular}
+\end{table}
+
+%% FIXXME: contrib-packages!
+%% FIXXME: expiry
+%% FIXXME. depends
+
+\end{document}
+%% =================================================================
+
+\begin{table}[ht]
+  \centering
+  \caption{MISC }
+  \label{tab:misc}
+\begin{tabular}{llll}
+\vktableheading
+\vkshortcut{toggle COMMENT entry }{}{C-c ;}{} %% 11.1 Structural Markup Elements http://orgmode.org/org.html#Comment-lines
+\vkshortcut{add expiry date      }{}{C-c .}{}
+\vkusage{Define expiry date}{properties}{:EXPIRY: <2008-01-09 08:01>}
+\vkshortcut{handle expired entries}{}{}{org-expiry-handler-function}
+\vkusage{Define Quote}{}{\#+BEGIN\_QUOTE \ldots{}\#+END\_QUOTE}
+\vkusage{Define Comment}{}{\#+BEGIN\_COMMENT \ldots{} \#+END\_COMMENT}
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \caption{}
+  \label{tab:doc-}
+\begin{tabular}{lll}
+\vktableheading
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\vkshortcut{}{}{}{}
+\end{tabular}
+\end{table}
+
+
+\end{document}
+

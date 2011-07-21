@@ -10,15 +10,86 @@
 *** DONE schreiben
 	CLOSED: [2011-07-21 Don 13:45]
 *** TODO per email schicken
-** dvcs autosync (autocommit in verzeichnissen über inotify)
+** [[http://www.mayrhofer.eu.org/dvcs-autosync][dvcs autosync]]
+
+git-autocommit in verzeichnissen über inotify
 * Karl
-** TODO karl verwaltet seine references mit orgmode   
+** DONE karl verwaltet seine references mit orgmode
+CLOSED: [2011-07-21 Thu 19:33]
+:PROPERTIES:
+:CREATED: <2011-07-21 Thu 19:33>
+:END:
 *** C-) binding
 *** email mit config snippet schicken
+*** better: include actual config here:
 
-** "Organize your life in plain text!" Basis seiner ORGmode config
-** schickt uns seinen cheet sheet
-** easy templates (kap 15.2)
+[[http://tincman.wordpress.com/2011/01/04/research-paper-management-with-emacs-org-mode-and-reftex/][original blog entry]]
+
+#+begin_src emacs-lisp
+;; ######################################################
+;; http://tincman.wordpress.com/2011/01/04/research-paper-management-with-emacs-org-mode-and-reftex/
+;; org-mode and paper references
+
+(defadvice reftex-format-citation (before eval-citation-format)
+  (setq format (eval format)))
+
+(defun org-mode-reftex-setup ()
+  (load-library "reftex")
+  (and (buffer-file-name) (file-exists-p (buffer-file-name))
+       (progn
+	 ;enable auto-revert-mode to update reftex when bibtex file changes on disk
+	 (global-auto-revert-mode t)
+	 (reftex-parse-all)
+	 ;add a custom reftex cite format to insert links
+	 (reftex-set-cite-format
+	  '((?b . "[[bib:%l][%l.bib]]")
+	    (?n . "[[notes:%l][%l-notes]]")
+	    (?p . "[[papers:%l][%l.pdf]]")
+	    (?s . "[[papers:%l-self][%l-self.pdf]]")
+	    (?t . "%t")
+	    (?h . (concat "** %l - %t\n:PROPERTIES:\n:CREATED: "
+			  "<" (substring (format-time-string (org-time-stamp-format t t)) 1 -1) ">"
+			  "\n:Custom_ID: %l\n:END:\n[[bib:%l][%l.bib]]\n[[papers:%l][%l.pdf]]\n\n"))
+	    ))))
+  (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+  (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
+
+;(add-hook 'org-mode-hook 'org-mode-reftex-setup)
+(add-hook 'org-mode-hook
+	   (lambda ()
+	     (if (member "CHECK_NEEDED" org-todo-keywords-1)
+		 (org-mode-reftex-setup))))
+
+(defun org-mode-reftex-search ()
+  ;;jump to the notes for the paper pointed to at from reftex search
+  (interactive)
+  (org-open-link-from-string (format "[[notes:%s]]" (reftex-citation t))))
+
+(setq org-link-abbrev-alist
+      '(("bib" . "~/archive/papers_from_web/references.bib::%s")
+	("notes" . "~/share/all/org/references.org::#%s")
+	("papers" . "~/archive/papers_from_web/%s.pdf")))
+
+;; tries to format a new BibTeX entry according to own format
+;; from: http://www.mfasold.net/blog/2009/02/using-emacs-org-mode-to-draft-papers/
+;(vk-load-part "format-bib.el")
+;; does not work well enough
+#+end_src
+
+** [[http://www.delicious.com/vk/emacs][Emacs-related bookmarks of Karl (mostly Orgmode related though)]]
+:PROPERTIES:
+:CREATED: <2011-07-21 Thu 19:40>
+:END:
+** »[[http://doc.norang.ca/org-mode.html][Organize your life in plain text]]!» Basis seiner ORGmode config
+** DONE schickt uns seinen cheet sheet
+CLOSED: [2011-07-21 Thu 19:35]
+:PROPERTIES:
+:CREATED: <2011-07-21 Thu 19:35>
+:END:
+
+uploaded here
+
+** easy templates ([[http://orgmode.org/org.html#Easy-Templates][kap 15.2]])
 *** '<s'-TAB | begin src
 *** '<q'-TAB | quote
 *** '<v'-TAB | verbatime
@@ -28,22 +99,98 @@
 	</page>
 	</html>
 #+end_html
-** movie datenbank mit speziellen TODO 
-** Deadline die auf der agende erst später erscheint <date -days>
-** cfw calendar (jetzt noch ein addon
-** org-capture (standard binding C-c c)
-** org-clone-subtree-with-time-shift
-** refile (C-c w)
-** (C-c a) Agenda mode -> c custom searches -> dort eigene filter definiert
-*** TODO code snippet mit agenda mode filter (custom agenda)
+** movie datenbank mit speziellen TODO
+
+#+begin_src emacs-lisp
+# -*- coding: utf-8 -*-
+#+TODO: 2DOWNLOAD(d!) TODO(t!) BEGUN(b!) MAYBE(m@) | SEEN(s@)
+#+TAGS: gemeinsam(g) only_Petra(p) only_Karl(k) important(i) 
+
+* mit/für Petra                                                       
+:PROPERTIES:
+:CREATED: <2011-06-13 Mon 20:32>
+:END:
+
+** 2DOWNLOAD Bell Canto                                :gemeinsam:important:
+:PROPERTIES:
+:CREATED: <2011-07-18 Mon 00:49>
+:END:
+
+- Grazer Krimi
+- auf DVD: http://www.graz.at/cms/beitrag/10175048/4110508/
+#+end_src
+ 
+** Deadline die [[http://orgmode.org/org.html#Repeated-tasks][auf der Agenda erst später]] erscheint <date -days>
+** [[https://github.com/kiwanami/emacs-calfw][emacs-calfw]] calendar (jetzt noch ein addon)
+** [[http://orgmode.org/org.html#Setting-up-capture][org-capture]] (standard binding C-c c)
+** [[http://orgmode.org/org.html#Structure-editing][org-clone-subtree-with-time-shift]]
+** [[http://orgmode.org/org.html#Structure-editing][refile]] (C-c w)
+** (C-c a) Agenda mode -> [[http://orgmode.org/org.html#Storing-searches][c custom searches]] -> dort eigene filter definiert
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands
+      (quote (("w" "Waiting and Postponed tasks" todo "WAITING|SOMEDAY"
+               ((org-agenda-overriding-header "Waiting Tasks")))
+;;              ("r" "Refile New Notes and Tasks" tags "LEVEL=1+REFILE"
+;;               ((org-agenda-todo-ignore-with-date nil)
+;;                (org-agenda-todo-ignore-deadlines nil)
+;;                (org-agenda-todo-ignore-scheduled nil)
+;;                (org-agenda-todo-ignore-timestamp nil)
+;;                (org-agenda-overriding-header "Tasks to Refile")))
+;;              ("N" "Notes" tags "NOTE"
+;;               ((org-agenda-overriding-header "Notes")))
+	      ("c" . "custom searches") ; description for "c" prefix
+              ("ct" "@TUG" tags-todo "+@TUG"
+               ((org-agenda-overriding-header "TUG Tasks")))
+              ("ca" "@ALW" tags-todo "+@ALW"
+               ((org-agenda-overriding-header "ALW Tasks")))
+              ("cb" "Besorgungen" tags-todo "+Besorgung"
+               ((org-agenda-overriding-header "Besorgungen")))
+              ("cs" "Started tasks" tags-todo "/!STARTED"
+               ((org-agenda-overriding-header "Started Tasks")))
+              ("n" "Next and Started tasks" tags-todo "-WAITING-CANCELLED/!NEXT|STARTED"
+               ((org-agenda-overriding-header "Next Tasks")))
+              ("p" "Projects" tags-todo "LEVEL=2-REFILE|LEVEL=1+REFILE/!-DONE-CANCELLED-WAITING-SOMEDAY"
+               ((org-agenda-skip-function 'bh/skip-non-projects)
+                (org-agenda-overriding-header "Projects")))
+              ("o" "Other (Non-Project) tasks" tags-todo "LEVEL=2-REFILE|LEVEL=1+REFILE/!-DONE-CANCELLED-WAITING-SOMEDAY"
+               ((org-agenda-skip-function 'bh/skip-projects)
+                (org-agenda-overriding-header "Other Non-Project Tasks")))
+              ("A" "Tasks to be Archived" tags "LEVEL=2-REFILE/DONE|CANCELLED"
+               ((org-agenda-overriding-header "Tasks to Archive")
+                (org-agenda-skip-function 'bh/skip-non-archivable-tasks)))
+              ("h" "Habits" tags-todo "STYLE=\"habit\""
+               ((org-agenda-todo-ignore-with-date nil)
+                (org-agenda-todo-ignore-scheduled nil)
+                (org-agenda-todo-ignore-deadlines nil)
+                (org-agenda-overriding-header "Habits")))
+;;              ("#" "Stuck Projects" tags-todo "LEVEL=2-REFILE|LEVEL=1+REFILE/!-DONE-CANCELLED"
+;;               ((org-agenda-skip-function 'bh/skip-non-stuck-projects)
+;;                (org-agenda-overriding-header "Stuck Projects")))
+               ("*" "All open TODO tasks" tags-todo "-CANCELLED"
+               ((org-agenda-overriding-header "All Open TODO tasks")
+                (org-agenda-todo-ignore-with-date nil)
+                (org-agenda-todo-ignore-scheduled nil)
+                (org-agenda-todo-ignore-deadlines nil)
+                (org-agenda-todo-ignore-timestamp nil)
+                (org-agenda-todo-list-sublevels t)
+                (org-tags-match-list-sublevels 'indented))))))
+#+end_src
+
+*** DONE code snippet mit agenda mode filter (custom agenda)
+CLOSED: [2011-07-21 Thu 19:48]
+:PROPERTIES:
+:CREATED: <2011-07-21 Thu 19:48>
+:END:
+
 ** kann teile des documents per gpg verschlüsseln -> Passwordstore (http://orgmode.org/worg/org-tutorials/encrypting-files.html)
-** Org-mode contributed packages auf worg
+** [[http://orgmode.org/worg/org-contrib/index.html][Org-mode contributed packages auf worg]]
 ** bei predefined tags dann TAB um eigenen zu erstellen :MichaelProkop:MichaelHammer:
-** schmeißt templates in ein sammelfile (z.b. inbox.org)
-** archive (C-c C-x C-a)
+** Capture bzw. MobileOrg schmeisst templates in ein sammelfile (z.b. inbox.org)
+** [[http://orgmode.org/org.html#Archiving][archive]] (C-c C-x C-a)
 *** verschiebt inhalt in meeting_21.07.2011.org_archive
-** application link zu emacs mit allen org dateien als argumente
-** mobileorg sync mit webdav und unison (Appendix B MobileOrg)
+** Praktisch: application link zu emacs mit allen org dateien als argumente
+** mobileorg synct mit webdav und unison ([[http://orgmode.org/org.html#MobileOrg][Appendix B MobileOrg]])
 *** org exportiert einen stage local (org-mobile-push)
 *** dieser stage muss in ein verzeichnis gesynced werden auf dass mobileorg per webdav zugreifen kann
 *** org-mobile-pull holt die änderungen zurück in die "echten" org files

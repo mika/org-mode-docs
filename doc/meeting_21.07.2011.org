@@ -1,0 +1,49 @@
+#+TODO: IDEA(i) TODO(t) FEEDBACK(f) | DONE(d)
+#+TODO: | CANCELLED(c)
+#+TAGS: @office(o) | @home(h)
+
+* Mika
+** definiere individuelle tags und todos
+*** IDEA Eine neue idee												:@office:
+* Mueli
+** Time Tracking [/]
+*** DONE schreiben
+	CLOSED: [2011-07-21 Don 13:45]
+*** TODO per email schicken
+** dvcs autosync (autocommit in verzeichnissen über inotify)
+* Karl
+** TODO karl verwaltet seine references mit orgmode   
+*** C-) binding
+*** email mit config snippet schicken
+
+** "Organize your life in plain text!" Basis seiner ORGmode config
+** schickt uns seinen cheet sheet
+** easy templates (kap 15.2)
+*** '<s'-TAB | begin src
+*** '<q'-TAB | quote
+*** '<v'-TAB | verbatime
+#+begin_html
+	<html>
+	<page>
+	</page>
+	</html>
+#+end_html
+** movie datenbank mit speziellen TODO 
+** Deadline die auf der agende erst später erscheint <date -days>
+** cfw calendar (jetzt noch ein addon
+** org-capture (standard binding C-c c)
+** org-clone-subtree-with-time-shift
+** refile (C-c w)
+** (C-c a) Agenda mode -> c custom searches -> dort eigene filter definiert
+*** TODO code snippet mit agenda mode filter (custom agenda)
+** kann teile des documents per gpg verschlüsseln -> Passwordstore (http://orgmode.org/worg/org-tutorials/encrypting-files.html)
+** Org-mode contributed packages auf worg
+** bei predefined tags dann TAB um eigenen zu erstellen :MichaelProkop:MichaelHammer:
+** schmeißt templates in ein sammelfile (z.b. inbox.org)
+** archive (C-c C-x C-a)
+*** verschiebt inhalt in meeting_21.07.2011.org_archive
+** application link zu emacs mit allen org dateien als argumente
+** mobileorg sync mit webdav und unison (Appendix B MobileOrg)
+*** org exportiert einen stage local (org-mobile-push)
+*** dieser stage muss in ein verzeichnis gesynced werden auf dass mobileorg per webdav zugreifen kann
+*** org-mobile-pull holt die änderungen zurück in die "echten" org files

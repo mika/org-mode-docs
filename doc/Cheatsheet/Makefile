@@ -19,7 +19,6 @@ DVIPS_CMD = dvips
 BIBTEX_CMD = bibtex
 MAKEIDX_CMD = makeindex
 TIMESTAMP = `/bin/date +%Y-%m-%dT%H.%M`
-TIMESTAMP_AND_PROJECT = ${TIMESTAMP}_${PROJECTNAME}
 #PDFVIEWER = xpdf
 PDFVIEWER = acroread
 DVIVIEWER = xdvi
@@ -39,7 +38,7 @@ all: pl
 .PHONY: pdf
 pdf:
 	${PDFLATEX_CMD} ${MAINDOCUMENT}.tex
-	-mv ${MAINDOCUMENT}.pdf `/bin/date +%Y-%m-%d`_${PROJECTNAME}.pdf
+	-mv ${MAINDOCUMENT}.pdf ${PROJECTNAME}.pdf
 
 
 # --------------------------------------------------------

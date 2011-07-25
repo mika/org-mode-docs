@@ -1,4 +1,4 @@
-%% Time-stamp: <2011-06-21 14:12:44 vk>
+%% Time-stamp: <2011-07-25 11:24:25 vk>
 \documentclass[a4paper]{scrartcl}
 
 \usepackage{ucs}
@@ -89,6 +89,18 @@
 \vkshortcut{Export table}{}{}{org-table-export}
 \vkusage{Table formular}{below table}{\#+TBLFM: \$3 = \$1 + \$2}
 \vkusage{Incremetal numbers}{TBLFM}{\#+TBLFM: \$1=\@-1 + 1::@2\$1=1}  %% http://orgmode.org/worg/org-faq.html
+\end{tabular}
+\end{table}
+
+%% FIXXME: those are a few shortcuts; have to stroll through the chapter again!
+\begin{table}[ht]
+  \centering
+  \caption{Tables}
+  \label{tab:doc-tables}
+\begin{tabular}{lll}
+\vktableheading
+\vkishortcut{Save current position into ring}{}{C-c \$}{org-mark-ring-push}
+\vkishortcut{Jump previous position from ring}{}{C-c \%}{org-mark-ring-goto}
 \end{tabular}
 \end{table}
 
